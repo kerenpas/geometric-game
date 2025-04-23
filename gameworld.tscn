@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://dwtle7wlxr4xw"]
+
+[ext_resource type="Script" uid="uid://dto6tmxorkw3c" path="res://gameworld.gd" id="1_gao2v"]
+[ext_resource type="PackedScene" uid="uid://1wi331sk5e5m" path="res://falling_object.tscn" id="2_q34nq"]
+[ext_resource type="PackedScene" uid="uid://conj58nw8qf45" path="res://player.tscn" id="3_nwlw1"]
+
+[sub_resource type="Gradient" id="Gradient_qklut"]
+offsets = PackedFloat32Array(0, 0.99026, 0.993506, 1)
+colors = PackedColorArray(0, 0.447059, 0, 1, 0.108959, 0.321989, 0.387078, 1, 0.668675, 0.668675, 0.668675, 1, 0.0980392, 0.239216, 0.290196, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ynpfc"]
+gradient = SubResource("Gradient_qklut")
+
+[node name="Gameworld" type="Node2D"]
+script = ExtResource("1_gao2v")
+
+[node name="background" type="Sprite2D" parent="."]
+position = Vector2(243, 427)
+scale = Vector2(7.5, 13.2344)
+texture = SubResource("GradientTexture2D_ynpfc")
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="FallingObject" parent="." instance=ExtResource("2_q34nq")]
+
+[node name="Player" parent="." instance=ExtResource("3_nwlw1")]
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
