@@ -2,7 +2,7 @@ extends Area2D
 
 
 func _process(delta: float) -> void:
-	position.y += randf_range(5,10)
+	position.y += randf_range(4,10)
 	
 
 
