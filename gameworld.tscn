@@ -25,4 +25,12 @@ texture = SubResource("GradientTexture2D_ynpfc")
 
 [node name="Player" parent="." instance=ExtResource("3_nwlw1")]
 
+[node name="ScoreLabel" type="Label" parent="."]
+offset_left = 48.0
+offset_top = 53.0
+offset_right = 103.0
+offset_bottom = 91.0
+scale = Vector2(2.1614, 1.8845)
+text = "ניקוד:0"
+
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
