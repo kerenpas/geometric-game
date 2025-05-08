@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://dwtle7wlxr4xw"]
+[gd_scene load_steps=11 format=3 uid="uid://dwtle7wlxr4xw"]
 
 [ext_resource type="Script" uid="uid://dto6tmxorkw3c" path="res://gameworld.gd" id="1_gao2v"]
 [ext_resource type="PackedScene" uid="uid://1wi331sk5e5m" path="res://falling_object.tscn" id="2_q34nq"]
 [ext_resource type="PackedScene" uid="uid://conj58nw8qf45" path="res://player.tscn" id="3_nwlw1"]
+[ext_resource type="AudioStream" uid="uid://0mhpv0opjkqv" path="res://wrong.wav" id="4_q34nq"]
 
 [sub_resource type="Gradient" id="Gradient_qklut"]
 offsets = PackedFloat32Array(0, 0.00649351, 0.00649399, 0.00974, 0.194805, 0.50974, 1)
@@ -10,6 +11,61 @@ colors = PackedColorArray(0.699837, 0.240947, 0.902853, 1, 0.479998, 0.0637872, 
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_ynpfc"]
 gradient = SubResource("Gradient_qklut")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fhcfw"]
+bg_color = Color(0.664535, 0.495288, 0.933389, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q34nq"]
+bg_color = Color(0.909116, 0.453143, 0.201417, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="FontFile" id="FontFile_q34nq"]
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/2/0/ascent = 0.0
+cache/0/2/0/descent = 0.0
+cache/0/2/0/underline_position = 0.0
+cache/0/2/0/underline_thickness = 0.0
+cache/0/2/0/scale = 1.0
+cache/0/3/0/ascent = 0.0
+cache/0/3/0/descent = 0.0
+cache/0/3/0/underline_position = 0.0
+cache/0/3/0/underline_thickness = 0.0
+cache/0/3/0/scale = 1.0
+cache/0/4/0/ascent = 0.0
+cache/0/4/0/descent = 0.0
+cache/0/4/0/underline_position = 0.0
+cache/0/4/0/underline_thickness = 0.0
+cache/0/4/0/scale = 1.0
+cache/0/5/0/ascent = 0.0
+cache/0/5/0/descent = 0.0
+cache/0/5/0/underline_position = 0.0
+cache/0/5/0/underline_thickness = 0.0
+cache/0/5/0/scale = 1.0
+cache/0/405/0/ascent = 0.0
+cache/0/405/0/descent = 0.0
+cache/0/405/0/underline_position = 0.0
+cache/0/405/0/underline_thickness = 0.0
+cache/0/405/0/scale = 1.0
+cache/0/100/0/ascent = 0.0
+cache/0/100/0/descent = 0.0
+cache/0/100/0/underline_position = 0.0
+cache/0/100/0/underline_thickness = 0.0
+cache/0/100/0/scale = 1.0
+cache/0/50/0/ascent = 0.0
+cache/0/50/0/descent = 0.0
+cache/0/50/0/underline_position = 0.0
+cache/0/50/0/underline_thickness = 0.0
+cache/0/50/0/scale = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nwlw1"]
+bg_color = Color(0.225397, 0.640275, 0.877552, 1)
 
 [node name="Gameworld" type="Node2D"]
 script = ExtResource("1_gao2v")
@@ -19,11 +75,13 @@ position = Vector2(243, 427)
 scale = Vector2(7.5, 13.2344)
 texture = SubResource("GradientTexture2D_ynpfc")
 
-[node name="Timer" type="Timer" parent="."]
+[node name="SpawnTimer" type="Timer" parent="."]
 
 [node name="FallingObject" parent="." instance=ExtResource("2_q34nq")]
 
 [node name="Player" parent="." instance=ExtResource("3_nwlw1")]
+
+[node name="UI" type="CanvasLayer" parent="."]
 
 [node name="ScoreLabel" type="Label" parent="."]
 offset_left = 48.0
@@ -33,4 +91,114 @@ offset_bottom = 91.0
 scale = Vector2(2.1614, 1.8845)
 text = "ניקוד:0"
 
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[node name="LivesLabel" type="Label" parent="."]
+offset_left = 80.0
+offset_top = 160.0
+offset_right = 129.0
+offset_bottom = 183.0
+text = "חיים:3"
+
+[node name="StageLabel" type="Label" parent="."]
+offset_left = 285.0
+offset_top = 83.0
+offset_right = 440.0
+offset_bottom = 106.0
+text = "שלב1: אסוך משולשים"
+
+[node name="TimerLabel" type="Label" parent="."]
+offset_left = 375.0
+offset_top = 162.0
+offset_right = 416.0
+offset_bottom = 185.0
+text = "01:00"
+
+[node name="StageAnnouncementPanel" type="Panel" parent="."]
+visible = false
+offset_right = 487.0
+offset_bottom = 855.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_fhcfw")
+
+[node name="AnnouncementLabel" type="Label" parent="StageAnnouncementPanel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "שלב 1\\nאסוף משולשים בלבד!"
+
+[node name="GameOverPanel" type="Panel" parent="."]
+visible = false
+offset_left = 6.0
+offset_top = 3.0
+offset_right = 482.0
+offset_bottom = 847.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_q34nq")
+
+[node name="GameOver" type="Label" parent="GameOverPanel"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 176.0
+offset_right = 398.0
+offset_bottom = 260.0
+theme_override_fonts/font = SubResource("FontFile_q34nq")
+theme_override_font_sizes/font_size = 50
+text = "Game Over :("
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RestartButton" type="Button" parent="GameOverPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -15.5
+offset_right = 50.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "התחל מחדש"
+
+[node name="FinalScoreLabel" type="Label" parent="GameOverPanel"]
+layout_mode = 0
+offset_left = 192.0
+offset_top = 281.0
+offset_right = 293.0
+offset_bottom = 352.0
+text = "ניקוד סופי:"
+
+[node name="GameCompletedPanel" type="Panel" parent="."]
+visible = false
+offset_right = 486.0
+offset_bottom = 854.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_nwlw1")
+
+[node name="RestartButton" type="Button" parent="GameCompletedPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -37.5
+offset_top = -15.5
+offset_right = 37.5
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "שחק שוב"
+
+[node name="FinalScoreLabel" type="Label" parent="GameCompletedPanel"]
+layout_mode = 0
+offset_left = 192.0
+offset_top = 235.0
+offset_right = 269.0
+offset_bottom = 258.0
+text = "ניקוד סופי"
+
+[node name="WrongShapeSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_q34nq")
+
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_timer_timeout"]
+[connection signal="pressed" from="GameOverPanel/RestartButton" to="." method="_on_restart_button_pressed"]
+[connection signal="pressed" from="GameCompletedPanel/RestartButton" to="." method="_on_restart_button_pressed"]

@@ -4,7 +4,7 @@ extends Area2D
 
 var velocity = Vector2()
 var screen_size
-var score = 0
+var can_collect = true  # Flag to prevent multiple collections at once
 
 signal shape_collected(shape_type)
 
@@ -26,22 +26,35 @@ func _process(delta: float) -> void:
 	position.x = clamp(position.x, 0, screen_size.x)
 
 func _on_area_entered(area: Area2D) -> void:
-	# Check if the colliding area is a falling object
-	if area.has_method("setup_shape"):
+	# Check if the colliding area is a falling object and player can collect
+	if area.has_method("setup_shape") and can_collect:
 		# Get the shape type of the collected object
 		var shape_type = area.shape_type
-		
-		# Update the score based on shape type
-		match shape_type:
-			0: # Triangle
-				score += 3
-			1: # Rectangle
-				score += 2
-			2: # Square
-				score += 1
-				
 		# Emit signal with the shape type
 		emit_signal("shape_collected", shape_type)
-		
-		# Output score to console (you can update a UI label instead)
-		print("Score: ", score)
+
+# Function to flash the player red when they lose a life
+func flash_damage():
+	can_collect = false  # Disable collection during animation
+	
+	# Store original color
+	var original_color = $Sprite2D.modulate
+	
+	# Flash red
+	$Sprite2D.modulate = Color(1, 0, 0)  # Red
+	
+	# Create a timer for the flash duration
+	var flash_timer = Timer.new()
+	flash_timer.wait_time = 0.2
+	flash_timer.one_shot = true
+	add_child(flash_timer)
+	flash_timer.start()
+	
+	# Wait until timer finishes
+	await flash_timer.timeout
+	
+	# Return to original color
+	$Sprite2D.modulate = original_color
+	flash_timer.queue_free()
+	
+	can_collect = true  # Re-enable collection
